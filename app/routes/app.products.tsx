@@ -31,8 +31,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
 
   const data = await request.formData();
-
-  console.log("data : ", data.get("title") || data.get("id"));
+  
+  console.log("request.method: ", request.method);
 
   const method = request.method.toUpperCase();
   const isDeleteRequest = method === "DELETE";
@@ -184,7 +184,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         product.media.edges[product.media.edges.length - 1].node.preview.image
           ? product.media.edges[product.media.edges.length - 1].node.preview
               .image.url
-          : product.media.edges[product.media.edges.length - 1].node.status,
+          : product.media?.edges?.length
+            ? product.media.edges[product.media.edges.length - 1]?.node?.status
+            : "",
     };
 
     update = true;
@@ -322,9 +324,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       json({ error: options.productOptionsCreate.userErrors[0] });
     }
 
-    const mediaRes = await media;
-    const mediaResJson = await mediaRes.json();
-    console.log("mediaResJson: ", mediaResJson.data.productCreateMedia.media);
+    await media;
 
     const variantsCreate = {
       mutation: `#graphql
@@ -403,11 +403,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       vendor: product.vendor,
       price: Number(variants.priceRangeV2.maxVariantPrice.amount),
       media:
-        variants.media?.length &&
+        variants.media?.edges?.length &&
         variants.media.edges[variants.media.edges.length - 1].node.preview.image
           ? variants.media.edges[variants.media.edges.length - 1].node.preview
               .image.url
-          : variants.media.edges[variants.media.edges.length - 1].node.status,
+          : variants.media.edges?.length
+            ? variants.media.edges[variants.media.edges.length - 1].node.status
+            : "",
     };
 
     console.log("newProduct: ", newProduct);
