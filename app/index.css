@@ -1,0 +1,7 @@
+.Polaris-DataTable__TableRow > td.Polaris-DataTable__Cell:nth-child(3) {
+  max-width: 350px;
+  overflow: hidden;
+}
+.Polaris-DataTable__TableRow > th.Polaris-DataTable__Cell {
+  min-width: 100px;
+}
