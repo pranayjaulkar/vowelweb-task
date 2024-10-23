@@ -426,7 +426,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await authenticate.admin(request);
   let response = await admin.graphql(`#graphql
       {
-        products(first: 10) {
+        products(first: 20) {
           edges {
             node {
               id
